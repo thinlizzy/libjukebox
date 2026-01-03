@@ -4,13 +4,17 @@ module(
     compatibility_level = 1,
 )
 
-new_local_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:local.bzl", "new_local_repository")
+bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "platforms", version = "1.0.0")
+
+new_local_repository = use_repo_rule(
+    "@bazel_tools//tools/build_defs/repo:local.bzl",
+    "new_local_repository",
+)
 
 new_local_repository(
-	name = "win32_libs",
-	# NOTE: replace with your own Windows libraries path
-	path = "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.26100.0/um/x64",
-	build_file_content = """
+    name = "win32_libs",
+    build_file_content = """
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
@@ -41,14 +45,15 @@ cc_library(
 	],
 )
 """,
+    # NOTE: replace with your own Windows libraries path
+    path = "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.26100.0/um/x64",
 )
 
 # linux
 
 new_local_repository(
-	name = "linux_libs",
-	path = "/usr/lib/x86_64-linux-gnu",
-	build_file_content = """
+    name = "linux_libs",
+    build_file_content = """
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
@@ -62,4 +67,5 @@ cc_library(
 	srcs = ["libpthread.so"],
 )
 """,
+    path = "/usr/lib/x86_64-linux-gnu",
 )
